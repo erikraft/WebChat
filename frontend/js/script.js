@@ -83,7 +83,7 @@ const handleLogin = (event) => {
     login.style.display = "none"
     chat.style.display = "flex"
 
-    websocket = new WebSocket("wss://webchat-backend-b23r.onrender.com)
+    websocket = new WebSocket("wss://webchat-backend-b23r.onrender.com")
     websocket.onmessage = processMessage
 }
 
