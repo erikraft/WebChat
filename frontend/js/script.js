@@ -24,6 +24,10 @@ const profileAddButton = chat.querySelector(".chat__profile-add")
 const profilePreviewList = chat.querySelector(".chat__profile-preview-list")
 const profileInsertButton = chat.querySelector(".chat__profile-insert")
 const profileClearButton = chat.querySelector(".chat__profile-clear")
+const profileShareSection = chat.querySelector(".chat__profile-share")
+const profileCloseButton = chat.querySelector(".chat__profile-close")
+const groupPanel = chat.querySelector(".chat__group-panel")
+const groupCloseButton = chat.querySelector(".chat__group-close")
 
 const EMBED_PREVIEW_EMPTY = `<p class="chat__embed-preview--empty">Cole um link compatível para gerar uma pré-visualização interativa.</p>`
 
@@ -167,10 +171,21 @@ const updatePresenceList = () => {
 const registerOnlineUser = (name, color = "") => {
     if (!name) return
 
+    const previousSize = knownUsers.size
+
     knownUsers.add(name)
     onlineUsers.set(name, color)
 
-    updateMentionOptions()
+    if (knownUsers.size !== previousSize) {
+        updateMentionOptions()
+    }
+    updatePresenceList()
+}
+
+const unregisterOnlineUser = (name) => {
+    if (!name) return
+
+    onlineUsers.delete(name)
     updatePresenceList()
 }
 
@@ -407,7 +422,24 @@ const togglePresencePanel = (forceOpen) => {
 }
 
 const processMessage = ({ data }) => {
-    const { userId, userName, userColor, content } = JSON.parse(data)
+    let payload
+
+    try {
+        payload = JSON.parse(data)
+    } catch (error) {
+        console.error("Mensagem inválida recebida", error)
+        return
+    }
+
+    if (payload?.type === "presence") {
+        handlePresenceMessage(payload)
+        return
+    }
+
+    const { userId, userName, userColor, content } =
+        payload?.type === "message" ? payload : payload || {}
+
+    if (!userName || typeof content !== "string") return
 
     registerOnlineUser(userName, userColor)
 
@@ -434,6 +466,39 @@ const processMessage = ({ data }) => {
     scrollScreen()
 }
 
+const sendPayload = (payload) => {
+    if (!websocket || websocket.readyState !== WebSocket.OPEN) return
+    websocket.send(JSON.stringify(payload))
+}
+
+const sendPresence = (action = "announce") => {
+    sendPayload({
+        type: "presence",
+        action,
+        userId: user.id,
+        userName: user.name,
+        userColor: user.color
+    })
+}
+
+const handlePresenceMessage = ({ action, userId: senderId, userName: senderName, userColor }) => {
+    if (!senderName) return
+
+    if (action === "announce") {
+        registerOnlineUser(senderName, userColor)
+        return
+    }
+
+    if (action === "leave") {
+        unregisterOnlineUser(senderName)
+        return
+    }
+
+    if (action === "request" && senderId !== user.id) {
+        sendPresence("announce")
+    }
+}
+
 const handleLogin = (event) => {
     event.preventDefault()
 
@@ -458,7 +523,11 @@ const handleLogin = (event) => {
     }
 
     websocket = new WebSocket("wss://webchat-backend-b23r.onrender.com")
-    websocket.onmessage = processMessage
+    websocket.addEventListener("open", () => {
+        sendPresence("announce")
+        sendPresence("request")
+    })
+    websocket.addEventListener("message", processMessage)
 }
 
 const sendMessage = (event) => {
@@ -467,6 +536,7 @@ const sendMessage = (event) => {
     if (!chatInput) return
 
     const message = {
+        type: "message",
         userId: user.id,
         userName: user.name,
         userColor: user.color,
@@ -475,13 +545,21 @@ const sendMessage = (event) => {
 
     if (!message.content) return
 
-    websocket.send(JSON.stringify(message))
+    sendPayload(message)
 
     chatInput.value = ""
     if (embedPreview) embedPreview.innerHTML = EMBED_PREVIEW_EMPTY
     if (embedInput) embedInput.value = ""
     hideMentionSuggestions()
 }
+
+window.addEventListener("beforeunload", () => {
+    try {
+        sendPresence("leave")
+    } catch (error) {
+        // ignore shutdown errors
+    }
+})
 
 loginForm.addEventListener("submit", handleLogin)
 chatForm.addEventListener("submit", sendMessage)
@@ -593,6 +671,15 @@ if (advancedToggle && advancedPanel && chatForm) {
 
             const embedSection = chatForm.querySelector(".chat__embed")
             if (embedSection) embedSection.open = false
+
+            if (profileShareSection) profileShareSection.removeAttribute("hidden")
+            if (groupPanel) {
+                groupPanel.classList.remove("chat__group-panel--collapsed")
+                if (groupCloseButton) {
+                    groupCloseButton.textContent = "Cancelar"
+                    groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
+                }
+            }
         } else {
             advancedPanel.removeAttribute("hidden")
             chatForm.classList.add("chat__form--advanced-open")
@@ -609,6 +696,25 @@ if (embedCloseButton) {
 
         const embedSection = embedCloseButton.closest(".chat__embed")
         if (embedSection) embedSection.open = false
+    })
+}
+
+if (profileCloseButton && profileShareSection) {
+    profileCloseButton.addEventListener("click", () => {
+        profileShareSection.setAttribute("hidden", "")
+    })
+}
+
+if (groupCloseButton && groupPanel) {
+    groupCloseButton.addEventListener("click", () => {
+        const collapsed = groupPanel.classList.toggle("chat__group-panel--collapsed")
+        if (collapsed) {
+            groupCloseButton.textContent = "Reabrir"
+            groupCloseButton.setAttribute("aria-label", "Reabrir lista de grupos")
+        } else {
+            groupCloseButton.textContent = "Cancelar"
+            groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
+        }
     })
 }
 

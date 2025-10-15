@@ -199,28 +199,31 @@ body {
     background: #34c759;
 }
 
+
 .chat__messages {
     flex-grow: 1;
-    padding: 120px 30px 200px;
+    padding: 110px 28px 220px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    gap: 12px;
 }
 
 .chat__form {
     background-color: #191919;
-    padding: 12px 16px 16px;
+    padding: 14px 18px 18px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     position: fixed;
-    bottom: 0;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: min(420px, calc(100% - 32px));
-    border-radius: 18px 18px 0 0;
-    box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.35);
-    transition: width 0.25s ease;
+    width: min(360px, calc(100% - 32px));
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+    transition: width 0.25s ease, padding 0.25s ease;
+    z-index: 15;
 }
 
 .chat__form::before {
@@ -233,7 +236,8 @@ body {
 }
 
 .chat__form--advanced-open {
-    width: min(960px, calc(100% - 32px));
+    width: min(840px, calc(100% - 32px));
+    padding: 18px 22px 22px;
 }
 
 .chat__form-main {
@@ -270,21 +274,22 @@ body {
 
 .chat__advanced {
     display: none;
-    flex-direction: column;
-    gap: 16px;
+    gap: 18px;
     border-top: 1px solid #2a2a2a;
-    padding-top: 12px;
+    padding-top: 16px;
 }
 
 .chat__form--advanced-open .chat__advanced {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    align-items: start;
 }
 
 .chat__mention-suggestions {
     position: absolute;
-    bottom: 110%;
-    left: 72px;
-    right: 72px;
+    bottom: calc(100% + 12px);
+    left: 22px;
+    right: 22px;
     background: #1e1e1e;
     border-radius: 12px;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
@@ -294,7 +299,16 @@ body {
     flex-direction: column;
     max-height: 220px;
     overflow: auto;
-    z-index: 12;
+    z-index: 20;
+}
+
+.chat__mention-suggestions[hidden] {
+    display: none !important;
+}
+
+.chat__form-main,
+.chat__advanced {
+    position: relative;
 }
 
 .chat__mention-item {
@@ -325,6 +339,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    grid-column: 1 / -1;
 }
 
 .format-button {
@@ -348,7 +363,27 @@ body {
     outline: none;
 }
 
-.chat__input {
+.chat__form::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+.chat__form--advanced-open {
+    width: min(960px, calc(100% - 32px));
+}
+
+.chat__form-main {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    position: relative;
+}
+
+.chat__advanced-toggle {
     border: none;
     padding: 12px 14px;
     border-radius: 10px;
@@ -513,16 +548,48 @@ body {
 .chat__profile-share {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     background-color: #212121;
-    border-radius: 10px;
-    padding: 16px;
+    border-radius: 12px;
+    padding: 18px;
     color: #e2e2e2;
 }
 
 .chat__profile-share-header > h3 {
     font-size: 1rem;
     font-weight: 600;
+}
+
+.chat__profile-share-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.chat__profile-share-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.chat__profile-close {
+    border: none;
+    background: transparent;
+    color: #bdbdbd;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.chat__profile-close:hover,
+.chat__profile-close:focus-visible {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    outline: none;
 }
 
 .chat__profile-share-header > p {
@@ -665,6 +732,83 @@ body {
     background-color: #3a3a3a;
     outline: none;
     transform: translateY(-1px);
+}
+
+.chat__group-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #212121;
+    border-radius: 12px;
+    padding: 18px;
+    color: #e2e2e2;
+}
+
+.chat__group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.chat__group-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.chat__group-close {
+    border: none;
+    border-radius: 10px;
+    background-color: #2a2a2a;
+    color: #f2f2f2;
+    padding: 8px 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.chat__group-close:hover,
+.chat__group-close:focus-visible {
+    background-color: #3a3a3a;
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.chat__group-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chat__group-list:empty::before {
+    content: "Nenhum grupo para mostrar.";
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.chat__group-empty {
+    font-size: 0.8rem;
+    color: #9e9e9e;
+    line-height: 1.4;
+}
+
+.chat__group-panel--collapsed {
+    gap: 8px;
+}
+
+.chat__group-panel--collapsed .chat__group-list,
+.chat__group-panel--collapsed .chat__group-empty {
+    display: none;
+}
+
+.chat__group-panel--collapsed::after {
+    content: "Lista de grupos ocultada. Clique em \"Reabrir\" para visualizar novamente.";
+    font-size: 0.8rem;
+    color: #9e9e9e;
+    line-height: 1.4;
 }
 
 :root {
@@ -857,9 +1001,14 @@ body {
 }
 
 @media (max-width: 500px) {
+    .chat__messages {
+        padding: 100px 18px 240px;
+    }
+
     .chat__form {
-        padding: 10px 12px 14px;
+        padding: 12px 14px 16px;
         gap: 10px;
+        bottom: 12px;
     }
 
     .chat__form-main {
@@ -875,6 +1024,15 @@ body {
 
     .chat__input {
         min-height: 64px;
+    }
+
+    .chat__advanced {
+        grid-template-columns: 1fr;
+    }
+
+    .chat__mention-suggestions {
+        left: 16px;
+        right: 16px;
     }
 
     .chat__profile-share-controls {
@@ -953,12 +1111,26 @@ body {
 }
 
 @media (max-width: 768px) {
+    .chat__messages {
+        padding: 110px 20px 240px;
+    }
+
+    .chat__form {
+        width: calc(100% - 36px);
+        left: 50%;
+    }
+
+    .chat__form--advanced-open {
+        width: calc(100% - 28px);
+    }
+
     .chat__embed {
         padding: 12px;
     }
 
     .chat__advanced {
         gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
     .chat__profile-share {
