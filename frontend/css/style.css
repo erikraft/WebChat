@@ -238,6 +238,25 @@ body {
 .chat__form--advanced-open {
     width: min(840px, calc(100% - 32px));
     padding: 18px 22px 22px;
+    max-height: min(calc(100dvh - 48px), 720px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    scrollbar-gutter: stable both-edges;
+}
+
+.chat__form--advanced-open::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat__form--advanced-open::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+}
+
+.chat__form--advanced-open::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .chat__form-main {
@@ -283,25 +302,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     align-items: start;
-    max-height: min(60dvh, 540px);
-    overflow-y: auto;
-    padding-right: 6px;
-    margin-right: -6px;
-    scroll-padding: 16px;
-    overscroll-behavior: contain;
-}
-
-.chat__form--advanced-open .chat__advanced::-webkit-scrollbar {
-    width: 6px;
-}
-
-.chat__form--advanced-open .chat__advanced::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 999px;
-}
-
-.chat__form--advanced-open .chat__advanced::-webkit-scrollbar-track {
-    background: transparent;
+    padding-right: 8px;
 }
 
 .chat__mention-suggestions {
@@ -1008,6 +1009,10 @@ body {
         padding: 12px 14px 16px;
         gap: 10px;
         bottom: 12px;
+    }
+
+    .chat__form--advanced-open {
+        max-height: calc(100dvh - 28px);
     }
 
     .chat__form-main {
