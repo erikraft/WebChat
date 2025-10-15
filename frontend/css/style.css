@@ -383,7 +383,28 @@ body {
     outline: none;
 }
 
-.chat__input {
+.chat__form::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+.chat__form--advanced-open {
+    width: min(840px, calc(100% - 32px));
+    padding: 18px 22px 22px;
+}
+
+.chat__form-main {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    position: relative;
+}
+
+.chat__advanced-toggle {
     border: none;
     padding: 12px 14px;
     border-radius: 10px;
