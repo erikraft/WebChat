@@ -131,7 +131,7 @@ const scrollScreen = () => {
 }
 
 const updateMentionOptions = () => {
-    mentionOptions = Array.from(knownUsers).sort((a, b) =>
+    mentionOptions = Array.from(onlineUsers.keys()).sort((a, b) =>
         a.localeCompare(b, "pt-BR", { sensitivity: "base" })
     )
 }
@@ -171,12 +171,12 @@ const updatePresenceList = () => {
 const registerOnlineUser = (name, color = "") => {
     if (!name) return
 
-    const previousSize = knownUsers.size
+    const wasNew = !onlineUsers.has(name)
 
     knownUsers.add(name)
     onlineUsers.set(name, color)
 
-    if (knownUsers.size !== previousSize) {
+    if (wasNew) {
         updateMentionOptions()
     }
     updatePresenceList()
@@ -186,6 +186,7 @@ const unregisterOnlineUser = (name) => {
     if (!name) return
 
     onlineUsers.delete(name)
+    updateMentionOptions()
     updatePresenceList()
 }
 
