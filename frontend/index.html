@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./css/style.css">
 
     <title>WebChat | ErikrafT</title>
@@ -32,10 +33,78 @@
             </section>
 
             <form class="chat__form">
-                <input type="text" class="chat__input" placeholder="Digite uma mensagem" required />
-                <button type="submit" class="chat__button">
-                    <span class="material-symbols-outlined">send</span>
-                </button>
+                <div class="chat__toolbar" role="toolbar" aria-label="Ferramentas de formatação">
+                    <button type="button" class="format-button" data-prefix="**" data-suffix="**" aria-label="Negrito">
+                        <i class="fa-solid fa-bold"></i>
+                    </button>
+                    <button type="button" class="format-button" data-prefix="*" data-suffix="*" aria-label="Itálico">
+                        <i class="fa-solid fa-italic"></i>
+                    </button>
+                    <button type="button" class="format-button" data-prefix="__" data-suffix="__" aria-label="Sublinhado">
+                        <i class="fa-solid fa-underline"></i>
+                    </button>
+                    <button type="button" class="format-button" data-prefix="~~" data-suffix="~~" aria-label="Riscado">
+                        <i class="fa-solid fa-strikethrough"></i>
+                    </button>
+                    <button type="button" class="format-button" data-prefix="==" data-suffix="==" aria-label="Grifado">
+                        <i class="fa-solid fa-highlighter"></i>
+                    </button>
+                    <button type="button" class="format-button" data-prefix="||" data-suffix="||" aria-label="Spoiler">
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </button>
+                    <button type="button" class="format-button" data-action="mention" aria-label="Mencionar usuário">
+                        <i class="fa-solid fa-at"></i>
+                    </button>
+                    <button type="button" class="format-button" data-prefix="> " data-suffix="\n" aria-label="Responder mensagem">
+                        <i class="fa-solid fa-reply"></i>
+                    </button>
+                </div>
+
+                <textarea class="chat__input" placeholder="Digite uma mensagem" rows="3" required></textarea>
+
+                <details class="chat__embed" aria-label="Compartilhar vídeos ou posts">
+                    <summary>
+                        <i class="fa-solid fa-photo-film"></i>
+                        Compartilhar vídeo ou post
+                    </summary>
+                    <label class="chat__embed-label" for="embed-url">Cole o link do conteúdo (YouTube, Twitter/X, Threads, Instagram, YouTube, Bluesky, Mastodon...)</label>
+                    <div class="chat__embed-controls">
+                        <input type="url" id="embed-url" class="chat__embed-input" placeholder="https://" inputmode="url" />
+                        <button type="button" class="chat__embed-button">Adicionar iFrame</button>
+                    </div>
+                    <p class="chat__embed-hint">O iFrame gerado será adicionado à sua mensagem e exibido abaixo para conferência.</p>
+                    <div class="chat__embed-preview" aria-live="polite"></div>
+                </details>
+
+                <div class="chat__form-footer">
+                    <div class="mp-social-wrapper">
+                        <a class="mp-button mp-social-discord" href="https://discord.gg/8ErMwRy4aj" target="_blank" rel="noreferrer">
+                            <i class="fa-brands fa-discord"></i>
+                        </a>
+                        <a class="mp-button mp-social-youtube" href="https://youtube.com/@ErikrafT" target="_blank" rel="noreferrer">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a class="mp-button mp-social-instagram" href="https://www.instagram.com/erikraft.yt" target="_blank" rel="noreferrer">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a class="mp-button mp-social-threads" href="https://threads.net/@erikraft.yt" target="_blank" rel="noreferrer">
+                            <i class="fa-brands fa-threads"></i>
+                        </a>
+                        <a class="mp-button mp-social-twitter" href="https://x.com/ErikrafTbr" target="_blank" rel="noreferrer">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a class="mp-button mp-social-bluesky" href="https://bsky.app/profile/erikraft.com" target="_blank" rel="noreferrer">
+                            <i class="fa-solid fa-feather"></i>
+                        </a>
+                        <a class="mp-button mp-social-poe" href="https://poe.com/erikraft" target="_blank" rel="noreferrer">
+                            <i class="fa-solid fa-robot"></i>
+                        </a>
+                    </div>
+
+                    <button type="submit" class="chat__button" aria-label="Enviar mensagem">
+                        <span class="material-symbols-outlined">send</span>
+                    </button>
+                </div>
             </form>
         </section>
 
