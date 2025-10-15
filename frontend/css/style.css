@@ -1182,6 +1182,75 @@ body {
     color: cadetblue;
 }
 
+/* Formatações de texto nas mensagens */
+.chat__messages strong {
+    font-weight: 700;
+}
+
+.chat__messages em {
+    font-style: italic;
+}
+
+.chat__messages u {
+    text-decoration: underline;
+}
+
+.chat__messages s {
+    text-decoration: line-through;
+}
+
+.chat__messages mark {
+    background-color: #ffeb3b;
+    color: #000;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.message--self mark {
+    background-color: #fdd835;
+}
+
+.chat__messages .spoiler {
+    background-color: #424242;
+    color: transparent;
+    padding: 2px 4px;
+    border-radius: 3px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.chat__messages .spoiler:hover,
+.chat__messages .spoiler:active {
+    background-color: #616161;
+    color: inherit;
+}
+
+.chat__messages blockquote {
+    border-left: 3px solid #757575;
+    padding-left: 10px;
+    margin: 5px 0;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.message--self blockquote {
+    border-left-color: #424242;
+}
+
+.chat__messages .mention {
+    background-color: rgba(52, 199, 89, 0.15);
+    color: #8af4a8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.message--self .mention {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #2e7d32;
+}
+
 @media (max-width: 768px) {
     .chat__topbar {
         flex-direction: column;
