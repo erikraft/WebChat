@@ -26,8 +26,6 @@ const profileInsertButton = chat.querySelector(".chat__profile-insert")
 const profileClearButton = chat.querySelector(".chat__profile-clear")
 const profileShareSection = chat.querySelector(".chat__profile-share")
 const profileCloseButton = chat.querySelector(".chat__profile-close")
-const groupPanel = chat.querySelector(".chat__group-panel")
-const groupCloseButton = chat.querySelector(".chat__group-close")
 
 const EMBED_PREVIEW_EMPTY = `<p class="chat__embed-preview--empty">Cole um link compatível para gerar uma pré-visualização interativa.</p>`
 
@@ -673,12 +671,11 @@ if (advancedToggle && advancedPanel && chatForm) {
             const embedSection = chatForm.querySelector(".chat__embed")
             if (embedSection) embedSection.open = false
 
-            if (profileShareSection) profileShareSection.removeAttribute("hidden")
-            if (groupPanel) {
-                groupPanel.classList.remove("chat__group-panel--collapsed")
-                if (groupCloseButton) {
-                    groupCloseButton.textContent = "Cancelar"
-                    groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
+            if (profileShareSection) {
+                profileShareSection.classList.remove("chat__profile-share--collapsed")
+                if (profileCloseButton) {
+                    profileCloseButton.textContent = "×"
+                    profileCloseButton.setAttribute("aria-label", "Fechar compartilhamento de perfis")
                 }
             }
         } else {
@@ -702,22 +699,17 @@ if (embedCloseButton) {
 
 if (profileCloseButton && profileShareSection) {
     profileCloseButton.addEventListener("click", () => {
-        profileShareSection.setAttribute("hidden", "")
-    })
-}
-
-if (groupCloseButton && groupPanel) {
-    groupCloseButton.addEventListener("click", () => {
-        const collapsed = groupPanel.classList.toggle("chat__group-panel--collapsed")
+        const collapsed = profileShareSection.classList.toggle("chat__profile-share--collapsed")
         if (collapsed) {
-            groupCloseButton.textContent = "Reabrir"
-            groupCloseButton.setAttribute("aria-label", "Reabrir lista de grupos")
+            profileCloseButton.textContent = "Reabrir"
+            profileCloseButton.setAttribute("aria-label", "Reabrir compartilhamento de perfis")
         } else {
-            groupCloseButton.textContent = "Cancelar"
-            groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
+            profileCloseButton.textContent = "×"
+            profileCloseButton.setAttribute("aria-label", "Fechar compartilhamento de perfis")
         }
     })
 }
+
 
 if (profileAddButton) {
     profileAddButton.addEventListener("click", () => {
