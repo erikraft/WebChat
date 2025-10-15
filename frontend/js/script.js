@@ -13,8 +13,6 @@ const mentionSuggestions = chat.querySelector(".chat__mention-suggestions")
 const presenceToggle = chat.querySelector(".chat__presence-toggle")
 const presencePanel = chat.querySelector(".chat__presence-panel")
 const presenceList = chat.querySelector(".chat__presence-list")
-const groupGenerateButton = chat.querySelector(".chat__group-generate")
-const groupList = chat.querySelector(".chat__group-list")
 const embedButton = chat.querySelector(".chat__embed-button")
 const embedPreview = chat.querySelector(".chat__embed-preview")
 const advancedToggle = chat.querySelector(".chat__advanced-toggle")
@@ -82,7 +80,6 @@ const colors = [
 const user = { id: "", name: "", color: "" }
 const knownUsers = new Set()
 const onlineUsers = new Map()
-const usedGroupCodes = new Set()
 const originalTitle = document.title
 const titleState = { hasUnread: false, mentionFrom: null }
 
@@ -393,48 +390,6 @@ const resetTitle = () => {
     titleState.hasUnread = false
     titleState.mentionFrom = null
     document.title = originalTitle
-}
-
-const generateGroupCode = () => {
-    let code = ""
-    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
-
-    do {
-        code = Array.from({ length: 6 }, () => {
-            const index = Math.floor(Math.random() * alphabet.length)
-            return alphabet[index]
-        }).join("")
-    } while (usedGroupCodes.has(code))
-
-    usedGroupCodes.add(code)
-    return code
-}
-
-const appendGroupCode = (code) => {
-    if (!groupList) return
-
-    const item = document.createElement("li")
-    item.className = "chat__group-item"
-
-    const codeLabel = document.createElement("span")
-    codeLabel.textContent = code
-
-    const copyButton = document.createElement("button")
-    copyButton.type = "button"
-    copyButton.textContent = "Copiar"
-    copyButton.addEventListener("click", async () => {
-        try {
-            await navigator.clipboard.writeText(code)
-            copyButton.textContent = "Copiado!"
-            setTimeout(() => (copyButton.textContent = "Copiar"), 1500)
-        } catch (error) {
-            copyButton.textContent = "Erro"
-            setTimeout(() => (copyButton.textContent = "Copiar"), 2000)
-        }
-    })
-
-    item.append(codeLabel, copyButton)
-    groupList.appendChild(item)
 }
 
 const togglePresencePanel = (forceOpen) => {
@@ -807,13 +762,6 @@ document.addEventListener("click", (event) => {
         togglePresencePanel(false)
     }
 })
-
-if (groupGenerateButton) {
-    groupGenerateButton.addEventListener("click", () => {
-        const code = generateGroupCode()
-        appendGroupCode(code)
-    })
-}
 
 window.addEventListener("focus", resetTitle)
 document.addEventListener("visibilitychange", () => {

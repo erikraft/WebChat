@@ -100,69 +100,29 @@ body {
     z-index: 5;
 }
 
-.chat__groups {
+.chat__headline {
     display: flex;
     align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    gap: 14px;
+    color: #f2f2f2;
 }
 
-.chat__group-generate {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 16px;
-    background: #1f8f4d;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.chat__group-generate:hover,
-.chat__group-generate:focus-visible {
-    background: #26a75d;
-    transform: translateY(-1px);
-    outline: none;
-}
-
-.chat__group-list {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.chat__group-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    border-radius: 10px;
+.chat__headline i {
+    font-size: 1.6rem;
     background: #262626;
-    color: #fff;
-    font-weight: 600;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.chat__group-item button {
-    border: none;
-    background: #363636;
-    color: #fff;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+.chat__headline-text h2 {
+    font-size: 1.15rem;
+    margin-bottom: 4px;
 }
 
-.chat__group-item button:hover,
-.chat__group-item button:focus-visible {
-    background: #4a4a4a;
-    outline: none;
+.chat__headline-text p {
+    font-size: 0.9rem;
+    color: #bdbdbd;
 }
 
 .chat__presence {
@@ -1049,13 +1009,18 @@ body {
         align-items: stretch;
     }
 
-    .chat__groups {
+    .chat__headline {
         width: 100%;
+        justify-content: center;
+        text-align: center;
     }
 
-    .chat__group-list {
-        flex-wrap: wrap;
-        justify-content: flex-start;
+    .chat__headline-text h2 {
+        font-size: 1.05rem;
+    }
+
+    .chat__headline-text p {
+        font-size: 0.85rem;
     }
 
     .chat__presence {
