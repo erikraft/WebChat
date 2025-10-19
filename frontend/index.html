@@ -67,28 +67,28 @@
 
                 <div class="chat__advanced" id="chat-advanced-panel" hidden>
                     <div class="chat__toolbar" role="toolbar" aria-label="Ferramentas de formatação">
-                        <button type="button" class="format-button" data-prefix="**" data-suffix="**" aria-label="Negrito">
+                        <button type="button" class="format-button" data-prefix="&lt;strong&gt;" data-suffix="&lt;/strong&gt;" data-placeholder="texto em negrito" aria-label="Negrito">
                             <i class="fa-solid fa-bold"></i>
                         </button>
-                        <button type="button" class="format-button" data-prefix="*" data-suffix="*" aria-label="Itálico">
+                        <button type="button" class="format-button" data-prefix="&lt;em&gt;" data-suffix="&lt;/em&gt;" data-placeholder="texto em itálico" aria-label="Itálico">
                             <i class="fa-solid fa-italic"></i>
                         </button>
-                        <button type="button" class="format-button" data-prefix="__" data-suffix="__" aria-label="Sublinhado">
+                        <button type="button" class="format-button" data-prefix="&lt;u&gt;" data-suffix="&lt;/u&gt;" data-placeholder="texto sublinhado" aria-label="Sublinhado">
                             <i class="fa-solid fa-underline"></i>
                         </button>
-                        <button type="button" class="format-button" data-prefix="~~" data-suffix="~~" aria-label="Riscado">
+                        <button type="button" class="format-button" data-prefix="&lt;s&gt;" data-suffix="&lt;/s&gt;" data-placeholder="texto riscado" aria-label="Riscado">
                             <i class="fa-solid fa-strikethrough"></i>
                         </button>
-                        <button type="button" class="format-button" data-prefix="==" data-suffix="==" aria-label="Grifado">
+                        <button type="button" class="format-button" data-prefix="&lt;mark&gt;" data-suffix="&lt;/mark&gt;" data-placeholder="texto grifado" aria-label="Grifado">
                             <i class="fa-solid fa-highlighter"></i>
                         </button>
-                        <button type="button" class="format-button" data-prefix="||" data-suffix="||" aria-label="Spoiler">
+                        <button type="button" class="format-button" data-prefix="&lt;span class=&quot;spoiler&quot; tabindex=&quot;0&quot;&gt;" data-suffix="&lt;/span&gt;" data-placeholder="segredo revelado" aria-label="Spoiler">
                             <i class="fa-solid fa-eye-slash"></i>
                         </button>
                         <button type="button" class="format-button" data-action="mention" aria-label="Mencionar usuário">
                             <i class="fa-solid fa-at"></i>
                         </button>
-                        <button type="button" class="format-button" data-prefix="> " data-suffix="\n" aria-label="Responder mensagem">
+                        <button type="button" class="format-button" data-prefix="&lt;blockquote&gt;" data-suffix="&lt;/blockquote&gt;" data-placeholder="Texto citado" aria-label="Responder mensagem">
                             <i class="fa-solid fa-reply"></i>
                         </button>
                     </div>
@@ -144,6 +144,14 @@
                         </div>
                     </section>
 
+                    <section class="chat__group-panel" aria-label="Grupos criados">
+                        <header class="chat__group-header">
+                            <h3>Grupos criados</h3>
+                            <button type="button" class="chat__group-close" aria-label="Fechar lista de grupos">Cancelar</button>
+                        </header>
+                        <ul class="chat__group-list" aria-label="Grupos criados"></ul>
+                        <p class="chat__group-empty">O modo clássico mantém todo mundo junto — nenhum grupo separado foi criado.</p>
+                    </section>
                 </div>
 
                 <div class="chat__mention-suggestions" hidden role="listbox" aria-label="Sugestões de menção"></div>

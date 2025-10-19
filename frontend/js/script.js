@@ -26,6 +26,8 @@ const profileInsertButton = chat.querySelector(".chat__profile-insert")
 const profileClearButton = chat.querySelector(".chat__profile-clear")
 const profileShareSection = chat.querySelector(".chat__profile-share")
 const profileCloseButton = chat.querySelector(".chat__profile-close")
+const groupPanel = chat.querySelector(".chat__group-panel")
+const groupCloseButton = chat.querySelector(".chat__group-close")
 
 const EMBED_PREVIEW_EMPTY = `<p class="chat__embed-preview--empty">Cole um link compatível para gerar uma pré-visualização interativa.</p>`
 
@@ -66,6 +68,234 @@ const SOCIAL_NETWORKS = {
         icon: "https://logo.erikraft.com/social/Poe_White_and_Colored.svg"
     }
 }
+
+const PROFILE_SHARE_STYLE_BLOCK = String.raw`<style id="mp-social-share-styles">
+:root {
+  --btn-green:    #107e3e;
+  --btn-green-2:  #16944c;
+  --btn-border:   #242424;
+
+  --btn-shadow-green: #0f5e36cc 0 -6px inset,
+                      rgba(178, 178, 178, 0.5) 2px 2px 0 inset,
+                      rgba(153, 153, 153, 0.5) -2px -8px 0 inset;
+
+  --btn-shadow-green-pressed: rgba(178, 178, 178, 0.5) 2px 2px 0 inset,
+                               rgba(153, 153, 153, 0.5) -2px -2px 0 inset;
+
+  --btn-shadow1: inset rgba(0, 0, 0, 0.25) 0 -6px 0,
+                 inset rgba(255, 255, 255, 0.1) 2px 2px,
+                 inset rgba(255, 255, 255, 0.05) -2px -6px;
+
+  --btn-shadow1-gray: inset rgba(255, 255, 255, 0.18) 0 -6px 0,
+                      inset rgba(255, 255, 255, 0.12) 2px 2px,
+                      inset rgba(255, 255, 255, 0.08) -2px -6px;
+
+  --btn-shadow2: inset rgba(0, 0, 0, 0.3) 0 -2px 0,
+                 inset rgba(255, 255, 255, 0.05) 2px 2px;
+}
+
+.mp-button-green {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  background: var(--btn-green);
+  border: 2px solid var(--btn-border);
+  font: 700 14px/1.2 Arial, Helvetica, sans-serif;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 16px 14px;
+  transition: background 0.1s, transform 0.1s;
+  flex: 1 1 auto;
+  min-width: 220px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.mp-button-green::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: var(--button-image) center/contain no-repeat;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.mp-button-green::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: var(--btn-shadow-green);
+  transition: box-shadow 0.1s, background 0.1s;
+}
+
+.mp-button-green:hover:not(:active) {
+  background: var(--btn-green-2);
+}
+
+.mp-button-green:active,
+.mp-button-green.active {
+  transform: translateY(6px);
+}
+
+.mp-button-green:active::after,
+.mp-button-green.active::after {
+  box-shadow: var(--btn-shadow-green-pressed);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.mp-button-green:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.mp-button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+}
+
+.mp-social-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.mp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  width: 15vw;
+  max-width: 60px;
+  min-width: 44px;
+  aspect-ratio: 6/5;
+  border: 2px solid var(--btn-border);
+  background-color: var(--btn-color, #48494a);
+  background-image: var(--btn-gradient, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 0;
+  transition: transform 0.1s;
+}
+
+.mp-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: var(--btn-shadow1);
+  pointer-events: none;
+  transition: box-shadow 0.1s;
+}
+
+.mp-social-twitter::before,
+.mp-social-threads::before,
+.mp-social-poe::before {
+  box-shadow: var(--btn-shadow1-gray);
+}
+
+.mp-button:active {
+  transform: translateY(6px);
+}
+
+.mp-button:active::before {
+  box-shadow: var(--btn-shadow2);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.mp-button img {
+  width: 60%;
+  height: auto;
+  image-rendering: pixelated;
+  z-index: 1;
+}
+
+.mp-social-discord    { --btn-color: #5865F2; --btn-gradient: none; }
+.mp-social-threads    { --btn-color: #000000; --btn-gradient: none; }
+.mp-social-twitter    { --btn-color: #000000; --btn-gradient: none; }
+.mp-social-youtube    { --btn-color: #FF0000; --btn-gradient: none; }
+.mp-social-poe        { --btn-color: #000000; --btn-gradient: none; }
+.mp-social-instagram  {
+  --btn-color: transparent;
+  --btn-gradient: linear-gradient(45deg, #ffb600, #fd0e49, #fb02b9);
+}
+.mp-social-messenger  {
+  --btn-color: transparent;
+  --btn-gradient: linear-gradient(45deg, #2382ff, #8c3fff, #fe557c);
+}
+.mp-social-bluesky {
+  --btn-color: transparent;
+  --btn-gradient: linear-gradient(to bottom, #117ffb, #349afd, #53b4fd);
+}
+
+@media (max-width: 500px) {
+  .mp-button {
+    width: 18vw;
+    min-width: 40px;
+  }
+
+  .mp-button img {
+    width: 65%;
+  }
+
+  .mp-button-green {
+    font-size: 13px;
+    padding: 8px 12px 12px;
+    min-width: 160px;
+  }
+
+  .mp-button-green::before {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.comment-author[data-browser="comet"]::after {
+    content: "";
+    display: inline-block;
+    margin-left: 6px;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    background-image: url("https://logo.erikraft.com/browser/Comet.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    position: relative;
+    cursor: pointer;
+}
+
+.comment-author:not([data-browser="comet"])::before {
+    content: none !important;
+}
+
+.comment-author[data-browser="comet"]:hover::before {
+    content: "Esta pessoa usa o Navegador Comet";
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #222;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    margin-left: 10px;
+    z-index: 99;
+    pointer-events: none;
+}
+</style>`
 
 if (embedPreview) embedPreview.innerHTML = EMBED_PREVIEW_EMPTY
 const chatMessages = chat.querySelector(".chat__messages")
@@ -169,7 +399,7 @@ const scrollScreen = () => {
 }
 
 const updateMentionOptions = () => {
-    mentionOptions = Array.from(onlineUsers.keys()).sort((a, b) =>
+    mentionOptions = Array.from(knownUsers).sort((a, b) =>
         a.localeCompare(b, "pt-BR", { sensitivity: "base" })
     )
 }
@@ -209,12 +439,12 @@ const updatePresenceList = () => {
 const registerOnlineUser = (name, color = "") => {
     if (!name) return
 
-    const wasNew = !onlineUsers.has(name)
+    const previousSize = knownUsers.size
 
     knownUsers.add(name)
     onlineUsers.set(name, color)
 
-    if (wasNew) {
+    if (knownUsers.size !== previousSize) {
         updateMentionOptions()
     }
     updatePresenceList()
@@ -224,7 +454,6 @@ const unregisterOnlineUser = (name) => {
     if (!name) return
 
     onlineUsers.delete(name)
-    updateMentionOptions()
     updatePresenceList()
 }
 
@@ -237,6 +466,16 @@ const hideMentionSuggestions = () => {
     mentionSuggestions.setAttribute("hidden", "")
     mentionState = null
     mentionActiveIndex = -1
+}
+
+const toggleSpoilerElement = (element) => {
+    if (!element) return
+
+    if (!element.hasAttribute("tabindex")) {
+        element.setAttribute("tabindex", "0")
+    }
+
+    element.classList.toggle("spoiler--revealed")
 }
 
 const highlightMentionOption = () => {
@@ -711,11 +950,12 @@ if (advancedToggle && advancedPanel && chatForm) {
             const embedSection = chatForm.querySelector(".chat__embed")
             if (embedSection) embedSection.open = false
 
-            if (profileShareSection) {
-                profileShareSection.classList.remove("chat__profile-share--collapsed")
-                if (profileCloseButton) {
-                    profileCloseButton.textContent = "×"
-                    profileCloseButton.setAttribute("aria-label", "Fechar compartilhamento de perfis")
+            if (profileShareSection) profileShareSection.removeAttribute("hidden")
+            if (groupPanel) {
+                groupPanel.classList.remove("chat__group-panel--collapsed")
+                if (groupCloseButton) {
+                    groupCloseButton.textContent = "Cancelar"
+                    groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
                 }
             }
         } else {
@@ -739,17 +979,22 @@ if (embedCloseButton) {
 
 if (profileCloseButton && profileShareSection) {
     profileCloseButton.addEventListener("click", () => {
-        const collapsed = profileShareSection.classList.toggle("chat__profile-share--collapsed")
-        if (collapsed) {
-            profileCloseButton.textContent = "Reabrir"
-            profileCloseButton.setAttribute("aria-label", "Reabrir compartilhamento de perfis")
-        } else {
-            profileCloseButton.textContent = "×"
-            profileCloseButton.setAttribute("aria-label", "Fechar compartilhamento de perfis")
-        }
+        profileShareSection.setAttribute("hidden", "")
     })
 }
 
+if (groupCloseButton && groupPanel) {
+    groupCloseButton.addEventListener("click", () => {
+        const collapsed = groupPanel.classList.toggle("chat__group-panel--collapsed")
+        if (collapsed) {
+            groupCloseButton.textContent = "Reabrir"
+            groupCloseButton.setAttribute("aria-label", "Reabrir lista de grupos")
+        } else {
+            groupCloseButton.textContent = "Cancelar"
+            groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
+        }
+    })
+}
 
 if (profileAddButton) {
     profileAddButton.addEventListener("click", () => {
@@ -827,9 +1072,13 @@ if (profileInsertButton) {
         if (!anchors) return
 
         const wrapperMarkup = `<div class="mp-social-wrapper">\n${anchors}\n</div>`
+        const shouldIncludeStyles = !chatInput.value.includes("mp-social-share-styles")
+        const snippet = shouldIncludeStyles
+            ? `${PROFILE_SHARE_STYLE_BLOCK}\n${wrapperMarkup}`
+            : wrapperMarkup
         const separator = chatInput.value ? "\n\n" : ""
 
-        chatInput.value = `${chatInput.value}${separator}${wrapperMarkup}`
+        chatInput.value = `${chatInput.value}${separator}${snippet}`
         chatInput.focus()
         chatInput.selectionStart = chatInput.value.length
         chatInput.selectionEnd = chatInput.value.length
@@ -845,6 +1094,29 @@ if (profileClearButton) {
 
         profilePreviewList.innerHTML = ""
         updateProfileActionsState()
+    })
+}
+
+if (chatMessages) {
+    chatMessages.addEventListener("click", (event) => {
+        const origin = event.target
+        if (!origin || origin.nodeType !== Node.ELEMENT_NODE) return
+
+        const target = origin.closest(".spoiler")
+        if (!target) return
+
+        event.preventDefault()
+        toggleSpoilerElement(target)
+    })
+
+    chatMessages.addEventListener("keydown", (event) => {
+        const target = event.target
+        if (!target || !target.classList || !target.classList.contains("spoiler")) return
+
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault()
+            toggleSpoilerElement(target)
+        }
     })
 }
 
