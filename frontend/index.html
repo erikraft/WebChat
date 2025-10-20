@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./css/style.css">
 
     <title>WebChat | ErikrafT</title>
@@ -22,6 +23,25 @@
         </section>
 
         <section class="chat">
+            <header class="chat__topbar">
+                <div class="chat__headline">
+                    <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                    <div class="chat__headline-text">
+                        <h2>Chat geral</h2>
+                        <p>Todos os participantes juntos em um único canal</p>
+                    </div>
+                </div>
+                <div class="chat__presence">
+                    <button type="button" class="chat__presence-toggle" aria-expanded="false" aria-controls="chat-presence-panel" aria-label="Mostrar participantes online">
+                        <i class="fa-solid fa-user-group" aria-hidden="true"></i>
+                    </button>
+                    <div class="chat__presence-panel" id="chat-presence-panel" hidden>
+                        <h3>Quem está online</h3>
+                        <ul class="chat__presence-list"></ul>
+                    </div>
+                </div>
+            </header>
+
             <section class="chat__messages">
                 <!-- <div class="message--self">Hello, World!</div>
 
@@ -31,11 +51,115 @@
                 </div> -->
             </section>
 
-            <form class="chat__form">
-                <input type="text" class="chat__input" placeholder="Digite uma mensagem" required />
-                <button type="submit" class="chat__button">
-                    <span class="material-symbols-outlined">send</span>
-                </button>
+            <form class="chat__form" novalidate>
+                <div class="chat__form-main">
+                    <button type="button" class="chat__advanced-toggle" aria-expanded="false" aria-controls="chat-advanced-panel" aria-label="Abrir opções avançadas">
+                        <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+                    </button>
+
+                    <textarea class="chat__input" placeholder="Digite uma mensagem" rows="3" required></textarea>
+
+                    <button type="submit" class="chat__button" aria-label="Enviar mensagem">
+                        <span class="material-symbols-outlined">send</span>
+                    </button>
+                </div>
+
+                <div class="chat__advanced" id="chat-advanced-panel" hidden>
+                    <div class="chat__toolbar" role="toolbar" aria-label="Ferramentas de formatação">
+                        <button type="button" class="format-button" data-prefix="&lt;strong&gt;" data-suffix="&lt;/strong&gt;" data-placeholder="texto em negrito" aria-label="Negrito">
+                            <i class="fa-solid fa-bold"></i>
+                        </button>
+                        <button type="button" class="format-button" data-prefix="&lt;em&gt;" data-suffix="&lt;/em&gt;" data-placeholder="texto em itálico" aria-label="Itálico">
+                            <i class="fa-solid fa-italic"></i>
+                        </button>
+                        <button type="button" class="format-button" data-prefix="&lt;u&gt;" data-suffix="&lt;/u&gt;" data-placeholder="texto sublinhado" aria-label="Sublinhado">
+                            <i class="fa-solid fa-underline"></i>
+                        </button>
+                        <button type="button" class="format-button" data-prefix="&lt;s&gt;" data-suffix="&lt;/s&gt;" data-placeholder="texto riscado" aria-label="Riscado">
+                            <i class="fa-solid fa-strikethrough"></i>
+                        </button>
+                        <button type="button" class="format-button" data-prefix="&lt;mark&gt;" data-suffix="&lt;/mark&gt;" data-placeholder="texto grifado" aria-label="Grifado">
+                            <i class="fa-solid fa-highlighter"></i>
+                        </button>
+                        <button type="button" class="format-button" data-prefix="&lt;q&gt;" data-suffix="&lt;/q&gt;" data-placeholder="texto entre aspas" aria-label="Aspas">
+                            <i class="fa-solid fa-quote-right"></i>
+                        </button>
+                        <button type="button" class="format-button" data-prefix="&lt;span class=&quot;spoiler&quot; tabindex=&quot;0&quot;&gt;" data-suffix="&lt;/span&gt;" data-placeholder="segredo revelado" aria-label="Spoiler">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
+                        <button type="button" class="format-button" data-action="mention" aria-label="Mencionar usuário">
+                            <i class="fa-solid fa-at"></i>
+                        </button>
+                        <button type="button" class="format-button" data-prefix="&lt;blockquote&gt;" data-suffix="&lt;/blockquote&gt;" data-placeholder="Texto citado" aria-label="Responder mensagem">
+                            <i class="fa-solid fa-reply"></i>
+                        </button>
+                        <button type="button" class="format-button format-button--linebreak" data-action="linebreak" aria-label="Inserir quebra de linha (Enter)">
+                            <span class="material-symbols-outlined" aria-hidden="true">keyboard_return</span>
+                        </button>
+                    </div>
+
+                    <details class="chat__embed" aria-label="Compartilhar vídeos ou posts">
+                        <summary>
+                            <i class="fa-solid fa-photo-film"></i>
+                            Compartilhar vídeo ou post
+                        </summary>
+                        <button type="button" class="chat__embed-close" aria-label="Fechar compartilhamento">&times;</button>
+                        <label class="chat__embed-label" for="embed-url">Cole o link do conteúdo (YouTube, Twitter/X, Threads, Instagram, YouTube, Bluesky, Mastodon...)</label>
+                        <div class="chat__embed-controls">
+                            <input type="url" id="embed-url" class="chat__embed-input" placeholder="https://" inputmode="url" />
+                            <button type="button" class="chat__embed-button">Adicionar iFrame</button>
+                        </div>
+                        <p class="chat__embed-hint">O iFrame gerado será adicionado à sua mensagem e exibido abaixo para conferência.</p>
+                        <div class="chat__embed-preview" aria-live="polite"></div>
+                    </details>
+
+                    <section class="chat__profile-share" aria-label="Compartilhar botões de perfil">
+                        <header class="chat__profile-share-header">
+                            <div class="chat__profile-share-text">
+                                <h3>Compartilhar perfil</h3>
+                                <p>Monte botões personalizados com o link do seu perfil antes de enviar a mensagem.</p>
+                            </div>
+                            <button type="button" class="chat__profile-close" aria-label="Fechar compartilhamento de perfis">&times;</button>
+                        </header>
+                        <div class="chat__profile-share-controls">
+                            <label class="chat__profile-field">
+                                <span>Rede</span>
+                                <select class="chat__profile-network">
+                                    <option value="discord">Discord</option>
+                                    <option value="youtube">YouTube</option>
+                                    <option value="instagram">Instagram</option>
+                                    <option value="threads">Threads</option>
+                                    <option value="twitter">Twitter (X)</option>
+                                    <option value="bluesky">Bluesky</option>
+                                    <option value="poe">Poe</option>
+                                </select>
+                            </label>
+                            <label class="chat__profile-field">
+                                <span>Link do perfil</span>
+                                <input type="url" class="chat__profile-url" placeholder="https://" inputmode="url" required />
+                            </label>
+                            <button type="button" class="chat__profile-add">Adicionar</button>
+                        </div>
+                        <div class="chat__profile-preview">
+                            <div class="mp-social-wrapper chat__profile-preview-list" aria-live="polite"></div>
+                            <div class="chat__profile-actions">
+                                <button type="button" class="chat__profile-insert" disabled>Inserir na mensagem</button>
+                                <button type="button" class="chat__profile-clear" disabled>Limpar</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="chat__group-panel" aria-label="Grupos criados">
+                        <header class="chat__group-header">
+                            <h3>Grupos criados</h3>
+                            <button type="button" class="chat__group-close" aria-label="Fechar lista de grupos">Cancelar</button>
+                        </header>
+                        <ul class="chat__group-list" aria-label="Grupos criados"></ul>
+                        <p class="chat__group-empty">O modo clássico mantém todo mundo junto — nenhum grupo separado foi criado.</p>
+                    </section>
+                </div>
+
+                <div class="chat__mention-suggestions" hidden role="listbox" aria-label="Sugestões de menção"></div>
             </form>
         </section>
 
