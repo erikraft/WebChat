@@ -324,7 +324,7 @@ const createMessageSelfElement = (content) => {
     const div = document.createElement("div")
 
     div.classList.add("message--self")
-    div.innerHTML = processFormatting(content)
+    appendDecoratedMarkup(div, content)
 
     return div
 }
@@ -337,11 +337,11 @@ const createMessageOtherElement = (content, sender, senderColor) => {
 
     span.classList.add("message--sender")
     span.style.color = senderColor
+    span.textContent = sender
 
     div.appendChild(span)
 
-    span.innerHTML = sender
-    div.innerHTML += processFormatting(content)
+    appendDecoratedMarkup(div, content)
 
     return div
 }
@@ -458,6 +458,124 @@ const unregisterOnlineUser = (name) => {
 }
 
 const escapeRegExp = (value = "") => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
+const getMentionRegex = () => {
+    const names = Array.from(knownUsers)
+        .map((name) => name.trim())
+        .filter(Boolean)
+        .sort((a, b) => b.length - a.length)
+
+    if (!names.length) return null
+
+    const pattern = names.map((name) => escapeRegExp(name)).join("|")
+    const terminators = "[\\s.,!?;:<>\\\"'()\\[\\]{}\\u201d\\u2019]"
+    return new RegExp(`@(${pattern})(?=$|${terminators})`, "gi")
+}
+
+const appendTextWithBreaks = (target, text) => {
+    if (!text) return
+
+    const segments = text.split(/\r?\n/g)
+
+    segments.forEach((segment, index) => {
+        if (segment) {
+            target.appendChild(document.createTextNode(segment))
+        }
+
+        if (index < segments.length - 1) {
+            target.appendChild(document.createElement("br"))
+        }
+    })
+}
+
+const createMentionFragment = (text, mentionRegex) => {
+    const fragment = document.createDocumentFragment()
+
+    if (!mentionRegex) {
+        appendTextWithBreaks(fragment, text)
+        return fragment
+    }
+
+    let lastIndex = 0
+    text.replace(mentionRegex, (match, name, offset) => {
+        const before = text.slice(lastIndex, offset)
+        appendTextWithBreaks(fragment, before)
+
+        const mentionEl = document.createElement("span")
+        mentionEl.className = "chat__mention"
+        mentionEl.textContent = match
+        mentionEl.dataset.mention = name
+        fragment.appendChild(mentionEl)
+
+        lastIndex = offset + match.length
+        return match
+    })
+
+    appendTextWithBreaks(fragment, text.slice(lastIndex))
+    return fragment
+}
+
+const shouldSkipTextNode = (node) => {
+    if (!node || !node.parentNode) return true
+
+    let parent = node.parentNode
+
+    while (parent && parent.nodeType === Node.ELEMENT_NODE) {
+        const tagName = parent.nodeName.toLowerCase()
+
+        if (tagName === "style" || tagName === "script") {
+            return true
+        }
+
+        if (parent.classList && parent.classList.contains("chat__mention")) {
+            return true
+        }
+
+        parent = parent.parentNode
+    }
+
+    return false
+}
+
+const buildDecoratedFragment = (markup = "") => {
+    const template = document.createElement("template")
+    template.innerHTML = markup
+
+    const mentionRegex = getMentionRegex()
+    const textNodes = []
+    const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT)
+
+    while (walker.nextNode()) {
+        const current = walker.currentNode
+
+        if (shouldSkipTextNode(current)) {
+            continue
+        }
+
+        if (!current.textContent || !current.textContent.trim()) {
+            continue
+        }
+
+        textNodes.push(current)
+    }
+
+    textNodes.forEach((node) => {
+        const fragment = createMentionFragment(node.textContent, mentionRegex)
+        node.replaceWith(fragment)
+    })
+
+    return template.content
+}
+
+function appendDecoratedMarkup(element, markup = "") {
+    if (!element) return
+
+    const normalized = typeof markup === "string" ? markup : String(markup ?? "")
+    if (!normalized) return
+
+    const fragment = buildDecoratedFragment(normalized)
+    element.appendChild(fragment)
+}
 
 const hideMentionSuggestions = () => {
     if (!mentionSuggestions) return

@@ -1179,6 +1179,25 @@ body {
     color: cadetblue;
 }
 
+.chat__messages .chat__mention {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: rgba(52, 199, 89, 0.18);
+    border: 1px solid rgba(52, 199, 89, 0.4);
+    color: #8af4a8;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.message--self .chat__mention {
+    background: rgba(16, 126, 62, 0.16);
+    border-color: rgba(16, 126, 62, 0.35);
+    color: #0f5e36;
+}
+
 .chat__messages strong,
 .chat__messages b {
     font-weight: 700;
