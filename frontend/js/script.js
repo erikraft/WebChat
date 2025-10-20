@@ -351,6 +351,46 @@ const getRandomColor = () => {
     return colors[randomIndex]
 }
 
+const processFormatting = (text) => {
+    if (!text) return text
+    
+    // Escape HTML to prevent XSS
+    let processed = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+    
+    // Process formatting in order of priority
+    // Spoiler: ||text||
+    processed = processed.replace(/\|\|(.+?)\|\|/g, '<span class="spoiler">$1</span>')
+    
+    // Highlight: ==text==
+    processed = processed.replace(/==(.+?)==/g, '<mark>$1</mark>')
+    
+    // Bold: **text**
+    processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    
+    // Italic: *text*
+    processed = processed.replace(/\*(.+?)\*/g, '<em>$1</em>')
+    
+    // Underline: __text__
+    processed = processed.replace(/__(.+?)__/g, '<u>$1</u>')
+    
+    // Strikethrough: ~~text~~
+    processed = processed.replace(/~~(.+?)~~/g, '<s>$1</s>')
+    
+    // Quote: > text (at start of line)
+    processed = processed.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>')
+    
+    // Mentions: @username
+    processed = processed.replace(/@(\w+)/g, '<span class="mention">@$1</span>')
+    
+    // Preserve line breaks
+    processed = processed.replace(/\n/g, '<br>')
+    
+    return processed
+}
+
 const scrollScreen = () => {
     window.scrollTo({
         top: document.body.scrollHeight,
