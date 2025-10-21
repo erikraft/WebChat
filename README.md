@@ -40,7 +40,7 @@ frontend/
 - O botão de aspas (`"`) envolve o trecho escolhido com a tag `<q>` e estiliza o destaque na bolha.
 - O botão **Enter** insere um `<br>` na posição do cursor para forçar uma nova linha sem enviar a mensagem.
 - O botão de menção (`@`) insere o gatilho correto e abre as sugestões.
-- Use o botão `×` para recolher o construtor de botões sociais temporariamente e o controle **Cancelar/Reabrir** para ocultar ou mostrar a lista de grupos.
+- Use o botão `×` para recolher o construtor de botões sociais temporariamente quando quiser focar em outras ações.
 
 ### Menções e notificações
 
