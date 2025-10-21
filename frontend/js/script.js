@@ -26,8 +26,6 @@ const profileInsertButton = chat.querySelector(".chat__profile-insert")
 const profileClearButton = chat.querySelector(".chat__profile-clear")
 const profileShareSection = chat.querySelector(".chat__profile-share")
 const profileCloseButton = chat.querySelector(".chat__profile-close")
-const groupPanel = chat.querySelector(".chat__group-panel")
-const groupCloseButton = chat.querySelector(".chat__group-close")
 
 const EMBED_PREVIEW_EMPTY = `<p class="chat__embed-preview--empty">Cole um link compatível para gerar uma pré-visualização interativa.</p>`
 
@@ -994,6 +992,27 @@ const wrapSelection = (prefix = "", suffix = "", placeholder = "") => {
     }
 }
 
+const insertLineBreak = () => {
+    if (!chatInput) return
+
+    hideMentionSuggestions()
+
+    const insertText = "<br>"
+    const { selectionStart, selectionEnd, value } = chatInput
+
+    const start = typeof selectionStart === "number" ? selectionStart : 0
+    const end = typeof selectionEnd === "number" ? selectionEnd : start
+
+    const before = value.slice(0, start)
+    const after = value.slice(end)
+    const newCursor = before.length + insertText.length
+
+    chatInput.value = `${before}${insertText}${after}`
+    chatInput.focus()
+    chatInput.selectionStart = newCursor
+    chatInput.selectionEnd = newCursor
+}
+
 const handleMention = () => {
     insertMentionTrigger()
 }
@@ -1069,13 +1088,6 @@ if (advancedToggle && advancedPanel && chatForm) {
             if (embedSection) embedSection.open = false
 
             if (profileShareSection) profileShareSection.removeAttribute("hidden")
-            if (groupPanel) {
-                groupPanel.classList.remove("chat__group-panel--collapsed")
-                if (groupCloseButton) {
-                    groupCloseButton.textContent = "Cancelar"
-                    groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
-                }
-            }
         } else {
             advancedPanel.removeAttribute("hidden")
             chatForm.classList.add("chat__form--advanced-open")
@@ -1098,19 +1110,6 @@ if (embedCloseButton) {
 if (profileCloseButton && profileShareSection) {
     profileCloseButton.addEventListener("click", () => {
         profileShareSection.setAttribute("hidden", "")
-    })
-}
-
-if (groupCloseButton && groupPanel) {
-    groupCloseButton.addEventListener("click", () => {
-        const collapsed = groupPanel.classList.toggle("chat__group-panel--collapsed")
-        if (collapsed) {
-            groupCloseButton.textContent = "Reabrir"
-            groupCloseButton.setAttribute("aria-label", "Reabrir lista de grupos")
-        } else {
-            groupCloseButton.textContent = "Cancelar"
-            groupCloseButton.setAttribute("aria-label", "Fechar lista de grupos")
-        }
     })
 }
 
@@ -1305,6 +1304,11 @@ formatButtons.forEach((button) => {
 
         if (action === "mention") {
             handleMention()
+            return
+        }
+
+        if (action === "linebreak") {
+            insertLineBreak()
             return
         }
 

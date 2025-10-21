@@ -7,7 +7,7 @@ Aplicação de chat em tempo real com foco em ferramentas avançadas de formata�
 - **Canal único**: todos os participantes conversam juntos no modo clássico, sem criação de grupos paralelos.
 - **Login rápido**: basta informar um nome para entrar na sala compartilhada.
 - **Compositor compacto**: o formulário de mensagem permanece discreto e revela recursos extras sob demanda.
-- **Formatação rica**: atalhos para negrito, itálico, sublinhado, riscado, grifado, spoiler e respostas.
+- **Formatação rica**: atalhos para negrito, itálico, sublinhado, riscado, grifado, aspas, spoiler, respostas e quebras de linha manuais.
 - **Menções inteligentes**: ao digitar `@`, sugestões com os nomes conectados via backend aparecem e a aba do navegador destaca novas menções.
 - **Compartilhamento de mídia**: gere iFrames de posts e vídeos de redes sociais compatíveis diretamente no chat.
 - **Botões de perfil**: monte rapidamente botões sociais personalizados com os ícones oficiais.
@@ -37,8 +37,10 @@ frontend/
 
 - Clique no ícone de ajustes para expandir as opções avançadas.
 - Utilize os botões de formatação para inserir marcação automaticamente no texto selecionado.
+- O botão de aspas (`"`) envolve o trecho escolhido com a tag `<q>` e estiliza o destaque na bolha.
+- O botão **Enter** insere um `<br>` na posição do cursor para forçar uma nova linha sem enviar a mensagem.
 - O botão de menção (`@`) insere o gatilho correto e abre as sugestões.
-- Use o botão `×` para recolher o construtor de botões sociais temporariamente e o controle **Cancelar/Reabrir** para ocultar ou mostrar a lista de grupos.
+- Use o botão `×` para recolher o construtor de botões sociais temporariamente quando quiser focar em outras ações.
 
 ### Menções e notificações
 
